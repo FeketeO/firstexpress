@@ -4,9 +4,25 @@ const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const logger = require('./config/logger');
-const { NetworkAuthenticationRequire } = require('http-errors');
+
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise
 
 const port = 3000;
+
+//Database connection
+mongoose
+.connect('mongodb+srv://admin01:Camel123@cluster01.9rocg.mongodb.net/Cluster01?retryWrites=true&w=majority',
+{
+useNewUrlParser: true,
+useUnifiedTopology: true
+})
+.then( () => logger.info('MongoDB connection has been established successfully'))
+.catch(err => {
+    logger.error(err);
+    process.exit();
+})
+
 
 // app.get('/', (req, res) => {
 //     res.send('Hello World');

@@ -1,5 +1,6 @@
 const express = require("express")
-const data = require('./data')
+const data = require('./data');
+const Person = require('../../models/person.model');
 const createError = require('http-errors');
 
 const controller = express.Router();
@@ -29,12 +30,25 @@ controller.post('/', (req, res, next) => {
      new createError.BadRequest("Missing properties!")
  )
     }
-    const newPerson = req.body;
-    newPerson.id = data[data.length -1].id + 1;
-    data.push(newPerson);
+    // const newPerson = req.body; --> mongoose Person-jét használom ezentúl alant
+    const newPerson = new Person({
+        firstName: first_name,
+        lastName: last_name,
+        email: email
+    })
+    // newPerson.id = data[data.length -1].id + 1; --> no SQL-tól kap mongoose óta egy ID-t, így ez nem kell
+    // data.push(newPerson); --> így a push sem kell
+// a save() method végzi el a módosítások mentését az adatbázisba:
+// res.status(201);
+//     res.json(newPerson)
+//     függvényen belülre kerül, ezt küldöm vissza a böngésző számára a mentés után
+    newPerson.save()
+        .then( data => {
+             res.status(201);
+             res.json(data);
+        });
 
-    res.status(201);
-    res.json(newPerson)
+    
 });
 
 // update

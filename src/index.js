@@ -3,7 +3,8 @@ const app = express();
 
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const logger = require('./config/logger')
+const logger = require('./config/logger');
+const { NetworkAuthenticationRequire } = require('http-errors');
 
 const port = 3000;
 
@@ -14,6 +15,10 @@ const port = 3000;
 
 // (minden elé rakom BeforeUnloadEvent, hogy hogyan logoljon)
 app.use(morgan('combined', {stream: logger.stream}));
+
+// app.use('/images', express.static('images')) - aztán beteszem a képeket a public file-ba, és megmondom neki, hogy a statikus file.okat a publicban keresse. Nem kell az images, ahogy a weblapon nem kell a public
+app.use(express.static('public'));
+
 app.use(bodyParser.json());
 app.use('/person', require('./controllers/person/routes'));
 

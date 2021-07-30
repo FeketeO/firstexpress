@@ -2,6 +2,7 @@ const express = require('express')
 const app = express();
 
 require("dotenv").config();
+const config = require('config');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const logger = require('./config/logger');
@@ -12,9 +13,15 @@ mongoose.Promise = global.Promise
 const port = process.env.PORT || 3000;
 
 //Database connection
+// confignak vannak metódusai, azokat használom congif json használataok
+if (!config.has('database')) {
+    logger.error('No database config found');
+    process.exit();
+}
+const { username, password, host} = config.get('database');
 mongoose
 // .connect('mongodb+srv://admin01:Camel123@cluster01.9rocg.mongodb.net/Cluster01?retryWrites=true&w=majority' ----> mikor az env file-t betöltjük:
-.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}`,
+.connect(`mongodb+srv://${username}:${password}@${host}`,
 
 {
 useNewUrlParser: true,

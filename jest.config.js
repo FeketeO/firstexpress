@@ -1,5 +1,5 @@
     module.exports = {
         coverageProvider: "V8",
-        testEnvironment= "node"
+        testEnvironment: "node"
 
     };

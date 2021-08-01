@@ -1,4 +1,4 @@
-const Person = requite('../../models/person.model');
+const Person = require('../../models/person.model');
 
 exports.create = personData => {
     const person = new Person(personData)

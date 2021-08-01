@@ -1,21 +1,3 @@
-const express = require("express")
-const data = require('./data');
-const Person = require('../../models/person.model');
-const createError = require('http-errors');
-const logger = require('../../config/logger')
-
-const controller = express.Router();
-
-// controller.get('/', (req, res) => {
-//     Person.find()
-//     // ha nem adunk meg neki paramétert, akkor az összeset lekéri a kollekcióból - mongoose
-//     .then(people => {
-//         logger.debug(`Get all people returning &{people.length} item`)
-//     })
-//     res.json(data)
-// // }); --> ezt átalakítjuk async functionná
-// // a fő url itt a / person
-
 controller.get('/', async (req, res) => {
     const people = await Person.find();
         logger.debug(`Get all people, returning ${people.length} items.`);
@@ -122,5 +104,3 @@ controller.delete('/:id', async (req, res, next) => {
 
     res.json({})
 });
-
-module.exports = controller;

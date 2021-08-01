@@ -14,11 +14,12 @@ const personService = require('./person.service')
     
     exports.create = (req, res, next) => {
         const {first_name, last_name, email} = req.body;
-        if ( !first_name || !last_name || email) {
+        if ( !first_name || !last_name || !email) {
             return next (
                 new createError.BadRequest("Missing properties!")
-            )
+            );
         }
+
         const newPerson = {
            firstName: first_name,
            lastName: last_name,
@@ -30,8 +31,10 @@ const personService = require('./person.service')
                 res.status(201);
                 res.json(createdPerson);
             })
-            .catch(err => )
-    }
+            .catch(err => 
+                next( new createError.InternalServerError(err.message)))
+            };
+    
 
     // GET ALL
 
@@ -40,7 +43,7 @@ const personService = require('./person.service')
         .then(people => {
             res.json(people)
         });
-    }
+    };
 
     // GET ONE
 
@@ -52,6 +55,7 @@ const personService = require('./person.service')
             }
             return person
         });
+    };
 
 // update
 
@@ -85,7 +89,6 @@ exports. delete = (req, res, next) => {
         .then( () => res.json({}) )
         .catch( err => {
             next(new createError.InternalServerError(err.message));
-        });
-}
-
-module.exports = controller;
+        } );
+    };
+    

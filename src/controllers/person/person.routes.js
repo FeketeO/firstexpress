@@ -25,7 +25,7 @@ router.put('/:id', (req, res, next) => {
 });
 
 //DELETE
-controller.delete('/:id', (req, res, next) => {
+router.delete('/:id', (req, res, next) => {
     return controller.delete(req, res, next);
 });
 

@@ -3,7 +3,7 @@
     {
         "username":"admin01",
         "password":"Camel123",
-        "host":"cluster01.9rocg.mongodb.net/Cluster01?retryWrites=true&w=majority"
+        "host":"cluster01.9rocg.mongodb.net/JestDB?retryWrites=true&w=majority"
     }
 }
 

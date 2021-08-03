@@ -46,7 +46,7 @@ describe('REST API integration tests', () => {
     });
 
     // tesztfüggvénnyel csináljuk a tényleges tesztelést, melyben előbb létrehozzuk az usereket majd lekérjük őket
-    
+
     test('GET /person', () => {
         return Person.insertMany(insertData)
             .then(() => supertest(app).get('/person').expect(200))
@@ -59,6 +59,23 @@ describe('REST API integration tests', () => {
                     expect(person.lastName).toBe(insertData[index].lastName);
                     expect(person.email).toBe(insertData[index].email);
                 });
+            });
+
+    });
+
+    test('GET /person/:id', () => {
+        let firstPersonId;
+        return Person.insertMany(insertData)
+            .then(people => {
+                firstPersonId = people[0]._id;
+                return supertest(app).get(`/person/${firstPersonId}`).expect(200)
+            })
+            .then(response => {
+                    const person = response.body;
+                    expect(person.firstName).toBe(insertData[0].firstName);
+                    expect(person.lastName).toBe(insertData[0].lastName);
+                    expect(person.email).toBe(insertData[0].email);
+                
             });
 
     });

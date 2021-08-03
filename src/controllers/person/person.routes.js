@@ -16,7 +16,7 @@ router.get('/', (req, res, next) => {
 
 // FIND ONE
 router.get('/:id', (req, res, next) => {
-    return controller.findAll(req, res, next);
+    return controller.findOne(req, res, next);
 });
 
 // UPDATE

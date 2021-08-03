@@ -2,7 +2,7 @@ const post = require('../../models/post.model');
 const Person = require('../../models/person.model')
 
 exports.create = postData => {
-    const post = new Post(postdata);
+    const post = new Post(postData);
     return post.save()
         .then( () => Person.findById(postData.author) )
         .then( author => {

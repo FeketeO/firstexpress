@@ -27,5 +27,19 @@ exports.create = (req, res, next) => {
 
     //  igazi életben NEM err.message-t küldök, mert a mongosse error válaszából lehet következtetni az adatbázis verziójára, pl, biztonsági szempontból nem jó. Itt most jó lesz, de igazából csináljunk neki egy error-r
 
-}
+};
+
+exports.findOne = (req, res, next) => {
+    return postService.findOne(req.params.id)
+    .then(post => {
+        if (!post) {
+            return next(new createError.BadRequest('Post is not found!'));
+        }
+
+        res.json();
+    })
+    .catch( err => {
+        return next(new createError.InternalServerError(err.message));
+    })
+};
 

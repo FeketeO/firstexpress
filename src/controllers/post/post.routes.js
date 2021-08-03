@@ -4,8 +4,14 @@ const controller = require('./post.controller');
 
 const router = express.Router();
 
+//FIND
+router.get('/post', (req, res, next) => {
+    return controller.findOne(req, res, next);
+});
+
+//CREATE
 router.post('/', (req, res, next) => {
-    return controller.create(req, rs, next);
+    return controller.create(req, res, next);
 });
 
 module.exports = router;

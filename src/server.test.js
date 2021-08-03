@@ -68,7 +68,7 @@ describe('REST API integration tests', () => {
         return Person.insertMany(insertData)
             .then(people => {
                 firstPersonId = people[0]._id;
-                return supertest(app).get(`/person/${firstPersonId}`).expect(200)
+                return supertest(app).get(`/person/${firstPersonId.toString()}`).expect(200)
             })
             .then(response => {
                     const person = response.body;

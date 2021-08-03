@@ -5,7 +5,7 @@ const controller = require('./post.controller');
 const router = express.Router();
 
 //FIND
-router.get('/post', (req, res, next) => {
+router.get('/:id', (req, res, next) => {
     return controller.findOne(req, res, next);
 });
 

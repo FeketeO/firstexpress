@@ -10,7 +10,7 @@ const PostSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    authorID: {
+    author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Person',
         required: true

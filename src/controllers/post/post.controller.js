@@ -5,16 +5,16 @@ const logger = require('../../config/logger');
 const postService = require('./post.service');
 
 exports.create = (req, res, next) => {
-    const {title, body, author_id} = req.body;
-    if (!title || !body || !author_id) {
-        return next(new createError.BadRequest('No title, body or author id!'));
+    const {title, body, author} = req.body;
+    if (!title || !body || !author) {
+        return next(new createError.BadRequest('No title, body or author!'));
 
     }
 
     const postData = { 
         title, 
         body, 
-        authorID = author_id 
+        author
     };
 
     return postService.create(postdata)

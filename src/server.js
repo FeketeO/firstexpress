@@ -7,12 +7,17 @@ const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs')
+const YAML = require('yamljs');
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+//authenticaton
+const authenticateJwt = require('./auth/authenticate');
+const adminOnly = require('./auth/adminonly.js');
+
 
 const swaggerDocument = YAML.load('./docs/swagger.yaml')
 
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise
+
 
 const { username, password, host} = config.get('database');
 mongoose
@@ -40,10 +45,13 @@ app.use(morgan('combined', {stream: logger.stream}));
 
 // app.use('/images', express.static('images')) - aztán beteszem a képeket a public file-ba, és megmondom neki, hogy a statikus file.okat a publicban keresse. Nem kell az images, ahogy a weblapon nem kell a public
 app.use(express.static('public'));
-
 app.use(bodyParser.json());
-app.use('/person', require('./controllers/person/person.routes'));
-app.use('/post', require('./controllers/post/post.routes'));
+
+//Router logic
+app.post('/login',require('./auth/login'));
+
+app.use('/person', authenticateJwt, require('./controllers/person/person.routes'));
+app.use('/post', authenticateJwt, adminOnly, require('./controllers/post/post.routes'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use( (err, req, res, next) => {

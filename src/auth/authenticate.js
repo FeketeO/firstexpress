@@ -23,4 +23,4 @@ module.exports = (req, res, next) => {
         // ha már az authHeader sincs meg az elején
         res.sendStatus(401)
     }
-}
+};

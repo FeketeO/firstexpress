@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const adminonly = require('./adminonly');
 
 
+
 const Users = [ 
     {
         username: 'admin',
@@ -17,6 +18,7 @@ const Users = [
 
 const refreshTokens = [];
 
+//LOGIN 
 module.exports.login = (req, res) => {
     const { username, password } = req.body;
 
@@ -50,32 +52,53 @@ module.exports.login = (req, res) => {
         }
 };
 
-module.exports = (req, res, next) => {
-    const authHeader = req.headers.authorization;
+//REFRESH
 
-    if (authHeader) {
-        // Bearer dgfdggfhgfhsgg
-        const token = authHeader.split('')[1];
-        // a token így néz ki: az eleje a típusa, aztán a titkosított rész. Splittel a szóköznél szétszedem, és fogom a második tagját a tömbnek ami a dgfdggfhgfhsgg, a titkosított token
+module.exports.refresh = (req, res, next) => {
+    const { token } = req.body;
 
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-            if (err) {
-                return res.sendStatus(403);
-            }
-
-            req.user = user;
-            next();
-
-            // tehát, ha sikerül beazonosítani a usert, akkor a request úgy megy már tovább,hogy van bene egy user, és az adminonly már ezt kapja meg, ahol az meg megnézi,hogy admin.e
-        })
-    } else {
-        // ha már az authHeader sincs meg az elején
-        res.sendStatus(401)
+    if (!token) {
+        return res.sendStatus(401);
     }
+
+    if (!refreshTokens.includes(token)) {
+        return res.sendStatus(403);
+    }
+
+    jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err) {
+            return res.sendStatus(403);
+        }
+
+        const accessToken = jwt.sign({
+            username: user.username,
+            role: user.role
+        }, process.env.ACCESS_TOKEN_SECRET, {
+            expiresIn: process.env.TOKEN_EXPIRY
+        });
+
+        res.json({
+            accessToken
+        });
+    });
+};
+
+//LOGOUT 
+
+module.exports.logout = (req, res) => {
+const { token } = req.body;
+
+if (!refreshTokens.includes(token)) {
+    return res.sendStatus(403);
+}
+
+const tokenIndex = refreshTokens.indexOf(token);
+refreshTokens.splice(tokenIndex, 1);
+
+res.sendStatus(200);
 };
 
 
-const jwt = require('jsonwebtoken');
 
 
 

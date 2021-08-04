@@ -17,8 +17,8 @@ exports.create = (req, res, next) => {
         author
     };
 
-    return postService.create(postdata)
-     .then( createdPost =>{
+    return postService.create(postData)
+     .then( createdPost => {
          res.status(201);
          res.json(createdPost)
         
@@ -36,7 +36,7 @@ exports.findOne = (req, res, next) => {
             return next(new createError.BadRequest('Post is not found!'));
         }
 
-        res.json();
+        res.json(post);
     })
     .catch( err => {
         return next(new createError.InternalServerError(err.message));

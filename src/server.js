@@ -10,9 +10,11 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-//authenticaton
+
+//AUTHENTICATION
 const authenticateJwt = require('./auth/authenticate');
 const adminOnly = require('./auth/adminonly.js');
+const authHandler = require('./auth/autthhandler');
 
 
 const swaggerDocument = YAML.load('./docs/swagger.yaml')
@@ -47,8 +49,10 @@ app.use(morgan('combined', {stream: logger.stream}));
 app.use(express.static('public'));
 app.use(bodyParser.json());
 
-//Router logic
-app.post('/login',require('./auth/login'));
+//ROUTER logic
+app.post('/login', authHandler.login);
+app.post('/refresh', authHandler.refresh);
+app.post('/logout', authHandler.logout);
 
 app.use('/person', authenticateJwt, require('./controllers/person/person.routes'));
 app.use('/post', authenticateJwt, adminOnly, require('./controllers/post/post.routes'));
